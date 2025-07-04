@@ -1,6 +1,10 @@
+-- =========================================
 -- Initial Complex Query (Unoptimized)
--- Retrieves all bookings with user, property, and payment details
+-- Retrieves all confirmed bookings with user, property, and payment details
+-- =========================================
 
+-- Performance analysis using EXPLAIN ANALYZE (PostgreSQL)
+EXPLAIN ANALYZE
 SELECT
     b.booking_id,
     b.start_date,
@@ -22,4 +26,9 @@ FROM
     Booking b
     JOIN User u ON b.user_id = u.user_id
     JOIN Property p ON b.property_id = p.property_id
-    LEFT JOIN Payment pay ON b.booking_id = pay.booking_id;
+    LEFT JOIN Payment pay ON b.booking_id = pay.booking_id
+WHERE
+    b.status = 'confirmed'
+    AND b.start_date >= '2024-07-01'
+    AND b.start_date < '2024-08-01'
+ORDER BY b.start_date DESC;
